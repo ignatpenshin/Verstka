@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "verstka-render-service"
+version = "0.1.0"
+description = "Rendering service for Markdown/LaTeX to PDF conversion"
+authors = ["Your Team <team@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.108.0"
+uvicorn = {extras = ["standard"], version = "^0.25.0"}
+markdown = "^3.5.1"
+markdown-it-py = "^3.0.0"
+pypandoc = "^1.12"
+weasyprint = "^60.1"
+pyppeteer = "^2.0.0"
+jinja2 = "^3.1.2"
+pydantic = "^2.5.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+black = "^23.12.0"
+ruff = "^0.1.8"
+mypy = "^1.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
