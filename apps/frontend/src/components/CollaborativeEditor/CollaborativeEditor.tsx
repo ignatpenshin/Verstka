@@ -2,7 +2,7 @@ import { useEditor, EditorContent, Editor as TiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { Toolbar } from '../Toolbar';
@@ -26,7 +26,7 @@ export const CollaborativeEditor = ({
   onEditorReady
 }: CollaborativeEditorProps) => {
   const [provider, setProvider] = useState<WebsocketProvider | null>(null);
-  const [yDoc] = useState(() => new Y.Doc());
+  const yDoc = useMemo(() => new Y.Doc(), []);
 
   useEffect(() => {
     // Connect to WebSocket collaboration server
@@ -44,42 +44,48 @@ export const CollaborativeEditor = ({
 
     return () => {
       wsProvider.destroy();
-      yDoc.destroy();
     };
   }, [documentId, yDoc]);
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        // Disable history extension as Yjs handles this
-        history: false,
-        heading: {
-          levels: [1, 2, 3, 4, 5, 6],
-        },
-        codeBlock: {
-          HTMLAttributes: {
-            class: 'code-block',
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit.configure({
+          // Disable history extension as Yjs handles this
+          history: false,
+          heading: {
+            levels: [1, 2, 3, 4, 5, 6],
           },
+          codeBlock: {
+            HTMLAttributes: {
+              class: 'code-block',
+            },
+          },
+        }),
+        ...(provider
+          ? [
+              Collaboration.configure({
+                document: yDoc,
+              }),
+              CollaborationCursor.configure({
+                provider: provider,
+                user: {
+                  name: userName,
+                  color: userColor,
+                },
+              }),
+            ]
+          : []),
+      ],
+      editable,
+      editorProps: {
+        attributes: {
+          class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none',
         },
-      }),
-      Collaboration.configure({
-        document: yDoc,
-      }),
-      CollaborationCursor.configure({
-        provider: provider || undefined,
-        user: {
-          name: userName,
-          color: userColor,
-        },
-      }),
-    ],
-    editable,
-    editorProps: {
-      attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none',
       },
     },
-  }, [provider, yDoc]);
+    [provider, editable]
+  );
 
   useEffect(() => {
     if (editor && onEditorReady) {
@@ -88,7 +94,7 @@ export const CollaborativeEditor = ({
   }, [editor, onEditorReady]);
 
   if (!editor) {
-    return <div className="editor-loading">Connecting...</div>;
+    return <div className="editor-loading">Loading editor...</div>;
   }
 
   return (
@@ -98,14 +104,20 @@ export const CollaborativeEditor = ({
         <EditorContent editor={editor} />
       </div>
       <div className="editor-status">
-        {provider?.wsconnected ? (
-          <span className="status-connected">● Connected</span>
+        {provider ? (
+          <>
+            {provider.wsconnected ? (
+              <span className="status-connected">● Connected</span>
+            ) : (
+              <span className="status-disconnected">● Connecting...</span>
+            )}
+            <span className="active-users">
+              {provider.awareness.getStates().size || 0} user(s) online
+            </span>
+          </>
         ) : (
-          <span className="status-disconnected">● Disconnected</span>
+          <span className="status-disconnected">● Initializing...</span>
         )}
-        <span className="active-users">
-          {provider?.awareness.getStates().size || 0} user(s) online
-        </span>
       </div>
     </div>
   );

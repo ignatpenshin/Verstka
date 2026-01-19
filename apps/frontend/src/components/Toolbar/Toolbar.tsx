@@ -111,20 +111,24 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         >
           —
         </button>
-        <button
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          title="Undo"
-        >
-          ↶
-        </button>
-        <button
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          title="Redo"
-        >
-          ↷
-        </button>
+        {editor.can().chain().undo && (
+          <button
+            onClick={() => editor.chain().focus().undo().run()}
+            disabled={!editor.can().undo()}
+            title="Undo"
+          >
+            ↶
+          </button>
+        )}
+        {editor.can().chain().redo && (
+          <button
+            onClick={() => editor.chain().focus().redo().run()}
+            disabled={!editor.can().redo()}
+            title="Redo"
+          >
+            ↷
+          </button>
+        )}
       </div>
     </div>
   );
