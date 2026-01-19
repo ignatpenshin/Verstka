@@ -1,0 +1,142 @@
+.editor-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.editor-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  background: white;
+}
+
+.editor-wrapper .ProseMirror {
+  padding: 1rem;
+  min-height: 100%;
+  outline: none;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+}
+
+.editor-wrapper .ProseMirror h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.editor-wrapper .ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 0.83em;
+  margin-bottom: 0.5em;
+}
+
+.editor-wrapper .ProseMirror h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 0.83em;
+  margin-bottom: 0.5em;
+}
+
+.editor-wrapper .ProseMirror p {
+  margin: 1em 0;
+}
+
+.editor-wrapper .ProseMirror ul,
+.editor-wrapper .ProseMirror ol {
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.editor-wrapper .ProseMirror code {
+  background-color: #f4f4f4;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+.editor-wrapper .ProseMirror .code-block {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1em;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.editor-wrapper .ProseMirror .code-block code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.editor-wrapper .ProseMirror blockquote {
+  border-left: 3px solid #ccc;
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: #666;
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  font-size: 1rem;
+}
+
+.editor-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.status-connected {
+  color: #28a745;
+}
+
+.status-disconnected {
+  color: #dc3545;
+}
+
+.active-users {
+  font-weight: 500;
+}
+
+/* Collaborative cursor styles */
+.collaboration-cursor__caret {
+  border-left: 2px solid;
+  border-right: 2px solid;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+.collaboration-cursor__label {
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 2px 6px;
+  position: absolute;
+  top: -1.4em;
+  user-select: none;
+  white-space: nowrap;
+}
